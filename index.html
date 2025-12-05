@@ -1,306 +1,368 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird 游戏</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
-        }
-        #gameContainer {
-            position: relative;
-            width: 400px;
-            height: 600px;
-        }
-        #gameCanvas {
-            display: block;
-            background: #70c5ce;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-        .game-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 15px 30px;
-            background: #FF5722;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s;
-            z-index: 10;
-        }
-        .game-btn:hover {
-            background: #E64A19;
-            transform: translate(-50%, -50%) scale(1.05);
-        }
-        #restartBtn {
-            display: none;
-            background: #2196F3;
-        }
-        #restartBtn:hover {
-            background: #1976D2;
-        }
-        #scoreDisplay {
-            position: absolute;
-            top: 20px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            font-size: 36px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DarkBrown Coffee</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      line-height: 1.7;
+      color: #333;
+      background-color: #f9f5f0;
+    }
+
+    header {
+      background-image: url('https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png');
+      background-size: cover;
+      background-position: center;
+      height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #fff;
+      position: relative;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 2;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    nav {
+      background-color: #3e2a20;
+      color: #fff;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+    }
+
+    nav li {
+      margin: 0 1.5rem;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #c1a889;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+
+    section {
+      margin-bottom: 4rem;
+    }
+
+    section h2 {
+      font-size: 2.2rem;
+      color: #4d3326;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      border-bottom: 3px solid #c1a889;
+      padding-bottom: 0.5rem;
+    }
+
+    .about p {
+      font-size: 1.1rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      color: #555;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 1.5rem;
+    }
+
+    .product-info h3 {
+      font-size: 1.4rem;
+      color: #4d3326;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-info p {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .price {
+      font-weight: bold;
+      color: #c1a889;
+      font-size: 1.2rem;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 2rem;
+    }
+
+    .contact-item {
+      flex: 1;
+      min-width: 250px;
+      text-align: center;
+      padding: 1.5rem;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-item h3 {
+      color: #4d3326;
+      margin-bottom: 1rem;
+    }
+
+    .contact-item p,
+    .contact-item a {
+      color: #555;
+      margin-bottom: 0.5rem;
+      display: block;
+      text-decoration: none;
+    }
+
+    .contact-item a:hover {
+      color: #c1a889;
+    }
+
+    .social-links a {
+      margin: 0 1rem;
+      font-size: 1.5rem;
+      color: #4d3326;
+      text-decoration: none;
+    }
+
+    .social-links a:hover {
+      color: #c1a889;
+    }
+
+    .events ul {
+      list-style: none;
+    }
+
+    .events li {
+      background: #fff;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border-left: 5px solid #c1a889;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .events strong {
+      color: #4d3326;
+    }
+
+    footer {
+      background-color: #3e2a20;
+      color: #c1a889;
+      text-align: center;
+      padding: 2rem 0;
+      margin-top: 4rem;
+    }
+
+    footer p {
+      margin: 0.5rem 0;
+    }
+  </style>
 </head>
 <body>
-    <div id="gameContainer">
-        <canvas id="gameCanvas" width="400" height="600"></canvas>
-        <div id="startBtn" class="game-btn">开始游戏</div>
-        <div id="restartBtn" class="game-btn">重新开始</div>
-        <div id="scoreDisplay">0</div>
-    </div>
+  <!-- Header & Navigation -->
+  <header>
+    <h1>DarkBrown Coffee</h1>
+    <p>醇香咖啡，源自热爱</p>
+  </header>
 
-    <script>
-        // 游戏资源
-        const birdImg = new Image();
-        birdImg.src = 'https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png';
+  <nav>
+    <ul>
+      <li><a href="#home">首页</a></li>
+      <li><a href="#about">关于我们</a></li>
+      <li><a href="#products">产品概览</a></li>
+      <li><a href="#events">社区活动</a></li>
+      <li><a href="#contact">联系我们</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <!-- 公司简介 -->
+    <section id="about" class="about">
+      <h2>关于我们</h2>
+      <p>
+        DarkBrown Coffee 成立于2015年，致力于为每一位咖啡爱好者提供高品质的手工烘焙咖啡豆与舒适的咖啡馆体验。我们坚持从全球精选优质咖啡原产地的生豆，采用小批量慢火烘焙工艺，保留每款豆子独特的风味层次。我们的门店不仅是品味咖啡的空间，更是连接人与人之间的温暖社区。
+      </p>
+    </section>
+
+    <!-- 产品概览 -->
+    <section id="products" class="products-section">
+      <h2>产品概览</h2>
+      <div class="products">
+        <div class="product-card">
+          <img src="https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png" alt="埃塞俄比亚耶加雪菲" />
+          <div class="product-info">
+            <h3>耶加雪菲 | 埃塞俄比亚</h3>
+            <p>明亮柑橘酸质，茉莉花香与蜂蜜甜感交织，适合手冲。</p>
+            <span class="price">¥88 / 200g</span>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <img src="https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png" alt="哥伦比亚慧兰" />
+          <div class="product-info">
+            <h3>慧兰 | 哥伦比亚</h3>
+            <p>均衡口感，焦糖甜香与坚果风味，适合意式拼配。</p>
+            <span class="price">¥78 / 200g</span>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <img src="https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png" alt="苏门答腊曼特宁" />
+          <div class="product-info">
+            <h3>曼特宁 | 苏门答腊</h3>
+            <p>浓郁醇厚，草本与巧克力尾韵，低酸重体感。</p>
+            <span class="price">¥92 / 200g</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 社区活动 -->
+    <section id="events" class="events">
+      <h2>社区活动</h2>
+      <ul>
+        <li>
+          <strong>周末手冲工作坊</strong><br />
+          每周六下午2点，学习专业手冲技巧，品鉴三款当季豆。<br />
+          地点：DarkBrown Coffee 南山店
+        </li>
+        <li>
+          <strong>咖啡农故事分享会</strong><br />
+          邀请合作农场主连线讲述种植历程，了解咖啡背后的故事。<br />
+          时间：每月第一个周三晚7点
+        </li>
+        <li>
+          <strong>本地艺术家展售日</strong><br />
+          支持本地创作，展出并售卖咖啡馆内艺术家作品。<br />
+          下期主题：“秋·褐”｜11月16日
+        </li>
+      </ul>
+    </section>
+
+    <!-- 联系方式 -->
+    <section id="contact" class="contact">
+      <h2>联系我们</h2>
+      <div class="contact-info">
+        <div class="contact-item">
+          <h3>门店地址</h3>
+          <p>深圳市南山区海德三道123号 DarkBrown Coffee</p>
+          <p>营业时间：周一至周日 8:00 - 20:00</p>
+        </div>
+
+        <div class="contact-item">
+          <h3>客服电话</h3>
+          <p><a href="tel:+8613800138000">+86 138 0013 8000</a></p>
+          <p><a href="mailto:service@darkbrown.coffee">service@darkbrown.coffee</a></p>
+        </div>
+
+        <div class="contact-item">
+          <h3>社交媒体</h3>
+          <div class="social-links">
+            <a href="https://weibo.com/darkbrowncoffee" target="_blank">微博</a>
+            <a href="https://www.xiaohongshu.com/user/profile" target="_blank">小红书</a>
+            <a href="https://www.instagram.com/darkbrowncoffee" target="_blank">Instagram</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 DarkBrown Coffee. 保留所有权利。</p>
+    <p>用心烘焙每一粒豆，传递每一份温度。</p>
+  </footer>
+
+  <script>
+    // 页面内锚点平滑滚动
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
         
-        const pipeImg = new Image();
-        pipeImg.src = 'https://bailian-bmp-pre.oss-cn-hangzhou.aliyuncs.com/public/system_agent/PlaceHolder.png';
+        window.scrollTo({
+          top: targetElement.offsetTop - 80,
+          behavior: 'smooth'
+        });
+      });
+    });
 
-        // 游戏变量
-        let canvas, ctx;
-        let bird = {
-            x: 60,
-            y: 300,
-            width: 34,
-            height: 24,
-            vy: 0,
-            gravity: 0.5,
-            lift: -10
-        };
-        let pipes = [];
-        let score = 0;
-        let gameState = 'idle'; // idle, playing, gameover
-        const pipeGap = 150;
-        const pipeWidth = 52;
-        const pipeSpeed = 2;
-        let lastPipeTime = 0;
-        let pipeInterval = 1500; // 生成管道的间隔(毫秒)
-        let animationFrameId = null;
-
-        // DOM 元素
-        let startBtn, restartBtn, scoreDisplay;
-
-        // 初始化游戏
-        function init() {
-            canvas = document.getElementById('gameCanvas');
-            ctx = canvas.getContext('2d');
-            startBtn = document.getElementById('startBtn');
-            restartBtn = document.getElementById('restartBtn');
-            scoreDisplay = document.getElementById('scoreDisplay');
-
-            // 事件绑定
-            startBtn.addEventListener('click', startGame);
-            restartBtn.addEventListener('click', restartGame);
-            canvas.addEventListener('click', handleGameAction);
-            document.addEventListener('keydown', function(e) {
-                if (e.code === 'Space') {
-                    handleGameAction();
-                }
-            });
-
-            // 初始绘制
-            draw();
-        }
-
-        // 开始游戏
-        function startGame() {
-            gameState = 'playing';
-            startBtn.style.display = 'none';
-            restartBtn.style.display = 'none';
-            score = 0;
-            scoreDisplay.textContent = '0';
-            scoreDisplay.style.opacity = '1';
-            
-            // 重置鸟的位置
-            bird.y = 300;
-            bird.vy = 0;
-            pipes = [];
-            lastPipeTime = Date.now();
-            
-            // 开始游戏循环
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-            }
-            gameLoop();
-        }
-
-        // 重新开始游戏
-        function restartGame() {
-            startGame();
-        }
-
-        // 处理游戏动作（点击或空格）
-        function handleGameAction() {
-            if (gameState === 'idle') {
-                startGame();
-            } else if (gameState === 'playing') {
-                bird.vy = bird.lift; // 鸟飞起来
-            }
-        }
-
-        // 游戏主循环
-        function gameLoop() {
-            if (gameState !== 'playing') return;
-            
-            update();
-            draw();
-            
-            animationFrameId = requestAnimationFrame(gameLoop);
-        }
-
-        // 更新游戏状态
-        function update() {
-            // 更新鸟的位置
-            bird.vy += bird.gravity;
-            bird.y += bird.vy;
-            
-            // 限制鸟在屏幕内
-            if (bird.y < 0) {
-                bird.y = 0;
-                bird.vy = 0;
-            }
-            if (bird.y > canvas.height - bird.height) {
-                bird.y = canvas.height - bird.height;
-                gameOver();
-                return;
-            }
-            
-            // 生成新管道
-            const now = Date.now();
-            if (now - lastPipeTime > pipeInterval) {
-                createPipe();
-                lastPipeTime = now;
-                // 难度递增：时间越长管道间隔越短
-                pipeInterval = Math.max(1000, 1500 - score * 20);
-            }
-            
-            // 更新管道位置
-            for (let i = pipes.length - 1; i >= 0; i--) {
-                pipes[i].x -= pipeSpeed;
-                
-                // 移除屏幕外的管道
-                if (pipes[i].x + pipeWidth < 0) {
-                    pipes.splice(i, 1);
-                    score++;
-                    scoreDisplay.textContent = score;
-                }
-                
-                // 检测碰撞
-                if (
-                    bird.x < pipes[i].x + pipeWidth &&
-                    bird.x + bird.width > pipes[i].x &&
-                    (
-                        bird.y < pipes[i].topHeight ||
-                        bird.y + bird.height > pipes[i].topHeight + pipeGap
-                    )
-                ) {
-                    gameOver();
-                    return;
-                }
-            }
-        }
-
-        // 创建新管道
-        function createPipe() {
-            const topHeight = Math.floor(Math.random() * (canvas.height - pipeGap - 150)) + 50;
-            pipes.push({
-                x: canvas.width,
-                topHeight: topHeight,
-                bottomHeight: canvas.height - topHeight - pipeGap
-            });
-        }
-
-        // 游戏结束
-        function gameOver() {
-            gameState = 'gameover';
-            restartBtn.style.display = 'block';
-            scoreDisplay.style.opacity = '0.5';
-        }
-
-        // 绘制游戏
-        function draw() {
-            // 清空画布
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // 绘制背景
-            ctx.fillStyle = '#70c5ce';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // 绘制管道
-            ctx.fillStyle = '#73bf2e';
-            for (const pipe of pipes) {
-                // 上管道
-                if (pipeImg.complete) {
-                    ctx.drawImage(pipeImg, pipe.x, 0, pipeWidth, pipe.topHeight);
-                } else {
-                    ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
-                }
-                
-                // 下管道（翻转绘制）
-                if (pipeImg.complete) {
-                    ctx.save();
-                    ctx.scale(1, -1);
-                    ctx.drawImage(pipeImg, pipe.x, -canvas.height + pipe.bottomHeight, pipeWidth, pipe.bottomHeight);
-                    ctx.restore();
-                } else {
-                    ctx.fillRect(pipe.x, canvas.height - pipe.bottomHeight, pipeWidth, pipe.bottomHeight);
-                }
-            }
-            
-            // 绘制鸟
-            if (birdImg.complete) {
-                // 根据速度旋转鸟
-                const rotation = bird.vy * 0.05;
-                ctx.save();
-                ctx.translate(bird.x + bird.width/2, bird.y + bird.height/2);
-                ctx.rotate(rotation);
-                ctx.drawImage(birdImg, -bird.width/2, -bird.height/2, bird.width, bird.height);
-                ctx.restore();
-            } else {
-                // 备用绘制（如果图片未加载）
-                ctx.fillStyle = '#FFD700';
-                ctx.beginPath();
-                ctx.ellipse(bird.x + bird.width/2, bird.y + bird.height/2, 
-                           bird.width/2, bird.height/2, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = 'black';
-                ctx.beginPath();
-                ctx.arc(bird.x + 20, bird.y + 10, 3, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        // 页面加载完成时初始化
-        window.addEventListener('load', init);
-    </script>
+    // 简单的页面加载动画（可选增强）
+    window.addEventListener('load', () => {
+      console.log('DarkBrown Coffee 网站已就绪。');
+    });
+  </script>
 </body>
 </html>
